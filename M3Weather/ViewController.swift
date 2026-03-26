@@ -7,30 +7,25 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+enum Weather: String{
+    case sunny = "Sunny"
+    case cloudy = "Cloudy"
+    case rainy = "Rainy"
+    case snowy = "Snowy"
     
-    @IBOutlet weak var weatherImageView: UIImageView!
-    @IBOutlet weak var statusLabel: UILabel!
-    @IBOutlet weak var temperatureLabel: UILabel!
-    
-    @IBOutlet weak var warningLabel: UILabel!
-    
-    
-    func getWeatherImage(matching weather: String) -> UIImage? {
-        switch weather {
-        case "Sunny":
+    var image: UIImage? {
+        switch self {
+        case .sunny:
             return UIImage(named: "sunny")
-        case "Cloudy":
+        case .cloudy:
             return UIImage(named: "cloudy")
-        case "Rainy":
+        case .rainy:
             return UIImage(named: "rainy")
-        case "Snowy":
+        case .snowy:
             return UIImage(named: "snowy")
-        default:
-            return nil
         }
     }
-        //Module 7 challenge task 5
+    
     func getTemperatureString(matching temperature: Int) -> String {
         switch temperature {
         case ..<19:
@@ -47,33 +42,24 @@ class ViewController: UIViewController {
             return "No Warning!"
         }
     }
+}
+
+class ViewController: UIViewController {
+    
+    @IBOutlet weak var weatherImageView: UIImageView!
+    @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var temperatureLabel: UILabel!
+    
+    @IBOutlet weak var warningLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let weather = ["Sunny", "Cloudy", "Rainy", "Snowy"].randomElement( ) ?? "N/A"
+        let weather = [Weather.sunny, .cloudy, .rainy, .snowy].randomElement( ) ?? .sunny
         let temperature = Int.random(in: 0 ... 100)
         
-        weatherImageView.image = getWeatherImage(matching: weather)
-        statusLabel.text = weather
+        weatherImageView.image = weather.image
+        statusLabel.text = weather.rawValue
         temperatureLabel.text = "\(temperature)°F"
-        warningLabel.text = getTemperatureString(matching: temperature)
+        warningLabel.text = weather.getTemperatureString(matching: temperature)
     }
-    
 }
-//M3 challenge task1
-/*if else
-if temperature < 20{
-    warningLabel.text = "Extreme cold"
-}else if temperature >= 20 && temperature < 50{
-    warningLabel.text = "It's cold outside!"
-}else if temperature >= 50 && temperature < 69{
-    warningLabel.text = "Cool and mild!"
-}else if temperature >= 69 && temperature < 86{
-    warningLabel.text = "Warm!"
-}else if temperature > 85 {
-    warningLabel.text = "Heat alert"
-}else{
-    warningLabel.text = "No warning!"
-}
- */
-
